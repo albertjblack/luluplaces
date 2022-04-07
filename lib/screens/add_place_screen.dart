@@ -1,5 +1,8 @@
+import 'dart:io';
+import 'package:luluplaces/models/place.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
-
+import './../providers/places_provider.dart';
 import './../widgets/image_input.dart';
 
 class AddPlaceScreen extends StatefulWidget {
@@ -12,6 +15,19 @@ class AddPlaceScreen extends StatefulWidget {
 
 class _AddPlaceScreenState extends State<AddPlaceScreen> {
   final _titleController = TextEditingController();
+  File? _pickedImage;
+  void _selectImage(File pickedImage) {
+    _pickedImage = pickedImage;
+  }
+
+  void _savePlace() {
+    if (_titleController.text.isEmpty || _pickedImage == null) {
+      return;
+    }
+    Provider.of<PlacesProvider>(context, listen: false)
+        .addPlace(_titleController.text, _pickedImage!);
+    Navigator.of(context).pop();
+  }
 
   @override
   void dispose() {
@@ -36,13 +52,13 @@ class _AddPlaceScreenState extends State<AddPlaceScreen> {
               const SizedBox(
                 height: 10,
               ),
-              ImageInput()
+              ImageInput(onSelectImage: _selectImage)
             ]),
           )),
         ),
         SafeArea(
           child: ElevatedButton.icon(
-            onPressed: () {},
+            onPressed: _savePlace,
             icon: const Icon(Icons.add),
             label: const Text("Add"),
             style: ElevatedButton.styleFrom(
