@@ -30,6 +30,7 @@ class _LocationInputState extends State<LocationInput> {
                 ), // from a google api that creates image on the fly
         ),
         Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
             TextButton.icon(
                 onPressed: () {},

@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:luluplaces/helpers/location_input.dart';
 import 'package:luluplaces/models/place.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
@@ -52,7 +53,11 @@ class _AddPlaceScreenState extends State<AddPlaceScreen> {
               const SizedBox(
                 height: 10,
               ),
-              ImageInput(onSelectImage: _selectImage)
+              ImageInput(onSelectImage: _selectImage),
+              const SizedBox(
+                height: 10,
+              ),
+              LocationInput()
             ]),
           )),
         ),
