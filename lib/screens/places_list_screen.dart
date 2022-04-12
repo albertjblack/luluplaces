@@ -20,23 +20,32 @@ class PlacesListScreen extends StatelessWidget {
                 icon: const Icon(Icons.add))
           ],
         ),
-        body: Consumer<PlacesProvider>(
-            child:
-                const Center(child: Text("No places yet, start adding some!")),
-            builder: (ctx, places, ch) => places.items.length <= 0
-                ? ch!
-                : ListView.builder(
-                    itemCount: places.items.length,
-                    itemBuilder: (ctx, i) => ListTile(
-                          leading: CircleAvatar(
-                              backgroundImage:
-                                  FileImage(places.items[i].image)),
-                          title: Text(
-                            places.items[i].title,
-                          ),
-                          onTap: () {
-                            // go to detail page
-                          },
-                        ))));
+        body: FutureBuilder(
+          future: Provider.of<PlacesProvider>(context, listen: false)
+              .fetchSetPlaces(),
+          builder: (ctx, snap) =>
+              snap.connectionState == ConnectionState.waiting
+                  ? const Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : Consumer<PlacesProvider>(
+                      child: const Center(
+                          child: Text("No places yet, start adding some!")),
+                      builder: (ctx, places, ch) => places.items.length <= 0
+                          ? ch!
+                          : ListView.builder(
+                              itemCount: places.items.length,
+                              itemBuilder: (ctx, i) => ListTile(
+                                    leading: CircleAvatar(
+                                        backgroundImage:
+                                            FileImage(places.items[i].image)),
+                                    title: Text(
+                                      places.items[i].title,
+                                    ),
+                                    onTap: () {
+                                      // go to detail page
+                                    },
+                                  ))),
+        ));
   }
 }
