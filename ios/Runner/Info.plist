@@ -51,10 +51,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>App location</string>
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>App location</string>
-
 </dict>
 </plist>
