@@ -3,6 +3,9 @@ import 'package:provider/provider.dart';
 
 import './providers/places_provider.dart';
 import './screens/places_list_screen.dart';
+import './screens/add_place_screen.dart';
+
+import './constants/constants.dart' show mySwatch;
 
 void main() {
   runApp(const MyApp());
@@ -15,11 +18,14 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (context) => PlacesProvider(),
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
         theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
-        home: const PlacesListScreen(),
+            primarySwatch: mySwatch, secondaryHeaderColor: Colors.red[600]),
+        routes: {
+          '/': (ctx) => const PlacesListScreen(),
+          AddPlaceScreen.routeName: (ctx) => const AddPlaceScreen(),
+        },
       ),
     );
   }
