@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:location/location.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+
+import './../helpers/location_helper.dart';
+import './../screens/map_screen.dart';
 
 class LocationInput extends StatefulWidget {
   LocationInput({Key? key}) : super(key: key);
@@ -8,13 +13,43 @@ class LocationInput extends StatefulWidget {
 }
 
 class _LocationInputState extends State<LocationInput> {
-  String?
-      _previewImageUrl; // store a link to the image of the location it shows
+  String? _previewImageUrl; // store location img link
+
+  Future<void> _getCurrentLocation() async {
+    final locData = await Location().getLocation();
+    final mapUrl = LocationHelper.getLocationPreview(
+        latitude: locData.latitude!, longitude: locData.longitude!);
+    setState(() {
+      _previewImageUrl = mapUrl;
+    });
+  }
+
+  Future<void> _selectOnMap() async {
+    // using a future because once screen is popped we can return data and listen to that with then or awaiting
+    final LatLng selectedLocation = await Navigator.of(context).push(
+        MaterialPageRoute(
+            fullscreenDialog: true,
+            builder: (ctx) => MapScreen(isSelecting: true)));
+    if (selectedLocation == null) {
+      return;
+    }
+    // logic
+    final mapUrl = LocationHelper.getLocationPreview(
+        latitude: selectedLocation.latitude,
+        longitude: selectedLocation.longitude);
+    setState(() {
+      _previewImageUrl = mapUrl;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
         Container(
+          decoration: BoxDecoration(
+              border: Border.all(color: Colors.grey, width: 0.5),
+              borderRadius: BorderRadius.circular(10)),
           alignment: Alignment.center,
           height: 150,
           width: double.infinity,
@@ -30,13 +65,14 @@ class _LocationInputState extends State<LocationInput> {
                 ), // from a google api that creates image on the fly
         ),
         Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
             TextButton.icon(
-                onPressed: () {},
+                onPressed: _getCurrentLocation,
                 icon: const Icon(Icons.location_on),
                 label: const Text("Current location")),
             TextButton.icon(
-                onPressed: () {},
+                onPressed: _selectOnMap,
                 icon: const Icon(Icons.map),
                 label: const Text("Location on map"))
           ],
