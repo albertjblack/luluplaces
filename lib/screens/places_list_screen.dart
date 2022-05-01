@@ -1,4 +1,4 @@
-import 'dart:io';
+//import 'dart:io';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import './add_place_screen.dart';
@@ -42,6 +42,8 @@ class PlacesListScreen extends StatelessWidget {
                                     title: Text(
                                       places.items[i].title,
                                     ),
+                                    subtitle:
+                                        Text(places.items[i].location.address!),
                                     onTap: () {
                                       // go to detail page
                                     },

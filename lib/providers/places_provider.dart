@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import './../models/place.dart';
 import './../models/place_location.dart';
 import './../helpers/db_helper.dart';
+import './../helpers/location_helper.dart';
 
 class PlacesProvider with ChangeNotifier {
   String TABLE_NAME = "user_places";
@@ -14,18 +15,26 @@ class PlacesProvider with ChangeNotifier {
     return [..._items];
   }
 
-  void addPlace(String title, File image) {
+  Future<void> addPlace(
+      String title, File image, PlaceLocation pickedLocation) async {
+    final address = await LocationHelper.getPlaceAddress(
+        pickedLocation.latitude, pickedLocation.longitude);
+    final placeLoc =
+        PlaceLocation(latitude: 0.0, longitude: 0.0, address: address);
     final newPlace = Place(
         id: DateTime.now().toString(),
         title: title,
-        location: PlaceLocation(latitude: 0.0, longitude: 0.0, address: ""),
+        location: placeLoc,
         image: image);
     _items.add(newPlace);
     notifyListeners();
     DbHelper.insert(TABLE_NAME, {
       "id": newPlace.id,
       "title": newPlace.title,
-      "image": newPlace.image.path
+      "image": newPlace.image.path,
+      "loc_lat": placeLoc.latitude,
+      "loc_lng": placeLoc.longitude,
+      "address": placeLoc.address!
     });
   }
 
@@ -35,8 +44,10 @@ class PlacesProvider with ChangeNotifier {
         .map((e) => Place(
             id: e["id"],
             title: e["title"],
-            location:
-                PlaceLocation(latitude: 0.0, longitude: 0.0, address: null),
+            location: PlaceLocation(
+                latitude: e["loc_lat"],
+                longitude: e["loc_lng"],
+                address: e["address"]),
             image: File(e["image"])))
         .toList();
     notifyListeners();

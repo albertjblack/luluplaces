@@ -1,4 +1,5 @@
 import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 const googleApi = "AIzaSyBg_SeRnCIOfQLA_CHrprJYy6XOxMPB1DE";
 
@@ -9,6 +10,9 @@ class LocationHelper {
   }
 
   static Future<String> getPlaceAddress(double lat, double lng) async {
-    return "";
+    final url = Uri.parse(
+        "https://maps.googleapis.com/maps/api/geocode/json?latlng=$lat,$lng&key=$googleApi");
+    final response = await http.get(url);
+    return json.decode(response.body)["results"][0]["formatted_address"];
   }
 }
