@@ -57,7 +57,7 @@ class _MapScreenState extends State<MapScreen> {
             ? {}
             : {
                 Marker(
-                  markerId: MarkerId('m1'),
+                  markerId: const MarkerId('m1'),
                   position: _pickedLocation!,
                 ),
               },
