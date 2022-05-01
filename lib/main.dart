@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import './providers/places_provider.dart';
 import './screens/places_list_screen.dart';
 import './screens/add_place_screen.dart';
+import './screens/place_detail_screen.dart';
 
 import './constants/constants.dart' show mySwatch;
 
@@ -25,6 +26,7 @@ class MyApp extends StatelessWidget {
         routes: {
           '/': (ctx) => const PlacesListScreen(),
           AddPlaceScreen.routeName: (ctx) => const AddPlaceScreen(),
+          PlaceDetailScreen.routeName: (ctx) => PlaceDetailScreen()
         },
       ),
     );

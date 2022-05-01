@@ -36,7 +36,7 @@ class _LocationInputState extends State<LocationInput> {
         MaterialPageRoute(
             fullscreenDialog: true,
             builder: (ctx) => MapScreen(isSelecting: true)));
-    if (selectedLocation == null) {
+    if (selectedLocation.latitude < 0.001) {
       return;
     }
     // logic

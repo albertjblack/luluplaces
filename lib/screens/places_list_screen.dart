@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import './add_place_screen.dart';
 import './../providers/places_provider.dart';
+import './place_detail_screen.dart';
 
 class PlacesListScreen extends StatelessWidget {
   static const routeName = "/places";
@@ -31,7 +32,7 @@ class PlacesListScreen extends StatelessWidget {
                   : Consumer<PlacesProvider>(
                       child: const Center(
                           child: Text("No places yet, start adding some!")),
-                      builder: (ctx, places, ch) => places.items.length <= 0
+                      builder: (ctx, places, ch) => places.items.isEmpty
                           ? ch!
                           : ListView.builder(
                               itemCount: places.items.length,
@@ -45,7 +46,9 @@ class PlacesListScreen extends StatelessWidget {
                                     subtitle:
                                         Text(places.items[i].location.address!),
                                     onTap: () {
-                                      // go to detail page
+                                      Navigator.of(context).pushNamed(
+                                          PlaceDetailScreen.routeName,
+                                          arguments: places.items[i].id);
                                     },
                                   ))),
         ));
